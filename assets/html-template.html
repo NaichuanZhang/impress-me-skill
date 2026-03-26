@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RESEARCH_TITLE</title>
+
+    <!-- ===========================================
+         FONTS: Replace with chosen preset fonts.
+         Use Fontshare or Google Fonts ONLY.
+         Never use system fonts as display.
+         =========================================== -->
+    <link rel="stylesheet" href="FONT_LINK_HERE">
+
+    <style>
+        /* ===========================================
+           CSS CUSTOM PROPERTIES
+           Replace with chosen preset colors.
+           =========================================== -->
+        :root {
+            /* Colors — from chosen STYLE_PRESETS.md */
+            --bg-primary: #0d1117;
+            --bg-section: #161b22;
+            --bg-section-alt: #0d1117;
+            --text-primary: #c9d1d9;
+            --text-secondary: #8b949e;
+            --accent: #58a6ff;
+            --accent-muted: rgba(88, 166, 255, 0.1);
+            --card-bg: #21262d;
+            --border: #30363d;
+            --chat-bg: #161b22;
+            --chat-border: #30363d;
+
+            /* Typography — from chosen preset */
+            --font-display: 'Space Grotesk', sans-serif;
+            --font-body: 'IBM Plex Sans', sans-serif;
+            --font-mono: 'IBM Plex Mono', monospace;
+        }
+
+        /* ===========================================
+           PASTE FULL viewport-research.css HERE
+           (All base styles, animations, chat panel,
+            progress bar, nav dots, breakpoints)
+           =========================================== */
+
+        /* ... viewport-research.css contents ... */
+
+        /* ===========================================
+           GLOBAL STYLES
+           =========================================== */
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        h1, h2, h3 {
+            font-family: var(--font-display);
+            line-height: var(--heading-line-height);
+        }
+
+        a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        a:hover { text-decoration: underline; }
+
+        /* ===========================================
+           PRESET-SPECIFIC STYLES
+           Add signature elements from chosen preset:
+           - Drop caps, pull quote styles, glow effects,
+             grid patterns, stat card variants, etc.
+           =========================================== */
+
+        /* Example: Research Lab preset signature */
+        .status-pill {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: var(--small-size);
+            font-weight: 500;
+        }
+        .status-pill.info { background: rgba(88, 166, 255, 0.15); color: var(--accent); }
+        .status-pill.positive { background: rgba(63, 185, 80, 0.15); color: #3fb950; }
+        .status-pill.caution { background: rgba(210, 153, 34, 0.15); color: #d29922; }
+        .status-pill.critical { background: rgba(248, 81, 73, 0.15); color: #f85149; }
+
+        .data-callout {
+            font-family: var(--font-mono);
+            font-size: var(--mono-size);
+            padding: clamp(0.75rem, 2vw, 1.25rem);
+            background: var(--card-bg);
+            border-left: 3px solid var(--accent);
+            border-radius: 0 8px 8px 0;
+        }
+
+        /* Hero section background */
+        .hero-section {
+            background:
+                radial-gradient(ellipse at 20% 50%, rgba(88, 166, 255, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(63, 185, 80, 0.05) 0%, transparent 50%),
+                var(--bg-section);
+        }
+
+        /* Alternating section backgrounds */
+        .research-section:nth-child(even) {
+            background: var(--bg-section-alt);
+        }
+        .research-section:nth-child(odd) {
+            background: var(--bg-section);
+        }
+
+        /* Stat cards */
+        .stat-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-top: 3px solid var(--accent);
+            border-radius: 8px;
+            padding: clamp(1rem, 2.5vw, 1.75rem);
+            text-align: center;
+        }
+
+        .stat-number {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            color: var(--accent);
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: var(--small-size);
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+
+        /* Finding cards */
+        .finding-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: clamp(1rem, 2.5vw, 2rem);
+            margin-bottom: var(--element-gap);
+        }
+
+        /* Pull quotes */
+        .pull-quote {
+            border-left: 3px solid var(--accent);
+            padding-left: clamp(1rem, 2vw, 1.5rem);
+            font-style: italic;
+            color: var(--text-secondary);
+        }
+
+        .pull-quote cite {
+            display: block;
+            margin-top: 0.5rem;
+            font-size: var(--small-size);
+            font-style: normal;
+            color: var(--accent);
+        }
+
+        /* Source cards */
+        .source-item {
+            padding: clamp(0.5rem, 1.5vw, 1rem) 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .source-item:last-child { border-bottom: none; }
+
+        .source-item a {
+            font-weight: 500;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .source-meta {
+            font-size: var(--small-size);
+            color: var(--text-secondary);
+        }
+
+        /* Scroll indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: clamp(1rem, 3vh, 2.5rem);
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-8px); }
+            60% { transform: translateX(-50%) translateY(-4px); }
+        }
+
+        /* Meta info bar */
+        .meta {
+            display: flex;
+            gap: clamp(0.75rem, 2vw, 1.5rem);
+            font-size: var(--small-size);
+            color: var(--text-secondary);
+            flex-wrap: wrap;
+        }
+
+        .meta span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+    </style>
+</head>
+<body>
+    <!-- ===========================================
+         READING PROGRESS BAR
+         =========================================== -->
+    <div class="reading-progress" id="readingProgress"></div>
+
+    <!-- ===========================================
+         NAVIGATION DOTS
+         =========================================== -->
+    <nav class="nav-dots" id="navDots" aria-label="Section navigation">
+        <!-- Generated by JS -->
+    </nav>
+
+    <!-- ===========================================
+         SECTION 1: HERO / TITLE
+         =========================================== -->
+    <section class="research-section snap-tight hero-section" data-section="hero" data-label="Hero">
+        <div class="section-content">
+            <span class="section-label reveal">RESEARCH REPORT</span>
+            <h1 class="reveal" style="margin-top: var(--element-gap);">RESEARCH_TITLE</h1>
+            <p class="reveal" style="font-size: clamp(1rem, 2vw, 1.35rem); color: var(--text-secondary); margin-top: var(--element-gap); max-width: 50ch;">
+                RESEARCH_SUBTITLE_OR_KEY_FINDING
+            </p>
+            <div class="meta reveal" style="margin-top: var(--content-gap);">
+                <span>RESEARCH_DATE</span>
+                <span>SOURCE_COUNT sources</span>
+                <span>READING_TIME min read</span>
+            </div>
+        </div>
+        <div class="scroll-indicator reveal">&#8595;</div>
+    </section>
+
+    <!-- ===========================================
+         SECTION 2: EXECUTIVE SUMMARY
+         =========================================== -->
+    <section class="research-section snap-tight" data-section="summary" data-label="Summary">
+        <div class="section-content">
+            <h2 class="reveal">Executive Summary</h2>
+            <div class="reveal" style="margin-top: var(--content-gap);">
+                <!-- Key findings as a brief grid or list -->
+                <div class="stats-grid reveal-stagger" style="margin-top: var(--content-gap);">
+                    <!-- REPEAT: One stat-card per key finding -->
+                    <div class="stat-card">
+                        <div class="stat-number counter-animate" data-target="STAT_VALUE">0</div>
+                        <div class="stat-label">STAT_LABEL</div>
+                    </div>
+                    <!-- END REPEAT -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SECTION 3+: KEY FINDINGS
+         Repeat this section for each research theme.
+         Use snap-flow for long-form analysis.
+         =========================================== -->
+    <section class="research-section snap-flow" data-section="finding-1" data-label="Finding 1">
+        <span class="section-number">01</span>
+        <div class="section-content">
+            <h2 class="reveal">FINDING_THEME_TITLE</h2>
+
+            <div class="reveal" style="margin-top: var(--content-gap);">
+                <p>FINDING_ANALYSIS_PARAGRAPHS</p>
+            </div>
+
+            <!-- Optional: Pull quote -->
+            <blockquote class="pull-quote reveal" style="margin-top: var(--content-gap);">
+                NOTABLE_QUOTE_TEXT
+                <cite>QUOTE_AUTHOR, QUOTE_SOURCE</cite>
+            </blockquote>
+
+            <!-- Optional: Data callout -->
+            <div class="data-callout reveal" style="margin-top: var(--content-gap);">
+                KEY_DATA_POINT_OR_STATISTIC
+            </div>
+
+            <!-- Optional: Finding cards -->
+            <div class="finding-card reveal" style="margin-top: var(--content-gap);">
+                <h3>SUB_FINDING_TITLE</h3>
+                <p style="margin-top: 0.5rem;">SUB_FINDING_DETAIL</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         DATA / STATISTICS SECTION
+         Use snap-tight for a focused data view.
+         =========================================== -->
+    <section class="research-section snap-tight" data-section="data" data-label="Data">
+        <div class="section-content wide">
+            <h2 class="reveal">Key Data Points</h2>
+            <div class="stats-grid reveal-stagger" style="margin-top: var(--content-gap);">
+                <!-- REPEAT: stat cards -->
+                <div class="stat-card">
+                    <div class="stat-number counter-animate" data-target="STAT_VALUE">0</div>
+                    <div class="stat-label">STAT_LABEL</div>
+                </div>
+                <!-- END REPEAT -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SOURCES / BIBLIOGRAPHY
+         =========================================== -->
+    <section class="research-section snap-flow" data-section="sources" data-label="Sources">
+        <div class="section-content">
+            <h2 class="reveal">Sources &amp; References</h2>
+            <div class="source-list reveal" style="margin-top: var(--content-gap);">
+                <!-- REPEAT: one source-item per source -->
+                <div class="source-item">
+                    <a href="SOURCE_URL" target="_blank" rel="noopener">SOURCE_TITLE</a>
+                    <div class="source-meta">SOURCE_AUTHOR &middot; SOURCE_DATE &middot; <span class="status-pill info">CREDIBILITY</span></div>
+                </div>
+                <!-- END REPEAT -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         CHAT POPOVER (hidden by default)
+         =========================================== -->
+    <div class="chat-popover" id="chatPopover" style="display: none;">
+        <button class="chat-popover-btn" id="chatPopoverBtn">
+            Ask about this &#8594;
+        </button>
+    </div>
+
+    <!-- ===========================================
+         CHAT PANEL (slides in from right)
+         =========================================== -->
+    <div class="chat-panel" id="chatPanel">
+        <div class="chat-header">
+            <h3>Research Assistant</h3>
+            <button class="chat-close" id="chatClose" aria-label="Close chat">&times;</button>
+        </div>
+        <div class="chat-context" id="chatContext" style="display: none;">
+            <div class="chat-context-label">Selected context</div>
+            <div class="chat-context-text" id="chatContextText"></div>
+        </div>
+        <div class="chat-messages" id="chatMessages"></div>
+        <div class="chat-input-area">
+            <textarea id="chatInput" placeholder="Ask a follow-up question..." rows="1"></textarea>
+            <button class="chat-send" id="chatSend" aria-label="Send message">Send</button>
+        </div>
+    </div>
+
+    <!-- ===========================================
+         JAVASCRIPT
+         =========================================== -->
+    <script>
+    (function() {
+        'use strict';
+
+        // =============================================
+        // 1. Intersection Observer — Reveal Animations
+        // =============================================
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.15 });
+
+        document.querySelectorAll('.reveal, .reveal-left, .reveal-scale, .reveal-stagger')
+            .forEach(el => revealObserver.observe(el));
+
+        // =============================================
+        // 2. Reading Progress Bar
+        // =============================================
+        const progressBar = document.getElementById('readingProgress');
+
+        function updateProgress() {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+            progressBar.style.width = progress + '%';
+        }
+
+        window.addEventListener('scroll', updateProgress, { passive: true });
+
+        // =============================================
+        // 3. Navigation Dots
+        // =============================================
+        const sections = document.querySelectorAll('.research-section');
+        const navDots = document.getElementById('navDots');
+
+        sections.forEach((section, i) => {
+            const dot = document.createElement('button');
+            dot.className = 'nav-dot';
+            dot.setAttribute('aria-label', section.dataset.label || `Section ${i + 1}`);
+            dot.addEventListener('click', () => {
+                section.scrollIntoView({ behavior: 'smooth' });
+            });
+            navDots.appendChild(dot);
+        });
+
+        const dots = navDots.querySelectorAll('.nav-dot');
+
+        const sectionObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const idx = Array.from(sections).indexOf(entry.target);
+                    dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+                }
+            });
+        }, { threshold: 0.3 });
+
+        sections.forEach(s => sectionObserver.observe(s));
+
+        // =============================================
+        // 4. Counter Animation
+        // =============================================
+        const counters = document.querySelectorAll('.counter-animate');
+
+        const counterObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                const el = entry.target;
+                if (el.dataset.animated) return;
+                el.dataset.animated = 'true';
+
+                const target = el.dataset.target;
+                const isNumber = !isNaN(parseFloat(target));
+
+                if (isNumber) {
+                    const end = parseFloat(target);
+                    const suffix = target.replace(/[\d.,]/g, '');
+                    const hasDecimal = target.includes('.');
+                    const duration = 1200;
+                    const start = performance.now();
+
+                    function animate(now) {
+                        const elapsed = now - start;
+                        const progress = Math.min(elapsed / duration, 1);
+                        const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+                        const current = eased * end;
+
+                        if (hasDecimal) {
+                            el.textContent = current.toFixed(1) + suffix;
+                        } else {
+                            el.textContent = Math.floor(current).toLocaleString() + suffix;
+                        }
+
+                        if (progress < 1) requestAnimationFrame(animate);
+                    }
+                    requestAnimationFrame(animate);
+                } else {
+                    el.textContent = target;
+                }
+            });
+        }, { threshold: 0.5 });
+
+        counters.forEach(c => counterObserver.observe(c));
+
+        // =============================================
+        // 5. Text Selection → Chat Popover
+        // =============================================
+        let currentSelection = null;
+        const popover = document.getElementById('chatPopover');
+        const popoverBtn = document.getElementById('chatPopoverBtn');
+
+        document.addEventListener('mouseup', (e) => {
+            if (e.target.closest('.chat-panel') || e.target.closest('.chat-popover')) return;
+
+            setTimeout(() => {
+                const selection = window.getSelection();
+                const text = selection.toString().trim();
+
+                if (text.length > 5) {
+                    currentSelection = text;
+                    const range = selection.getRangeAt(0);
+                    const rect = range.getBoundingClientRect();
+
+                    let top = rect.top - popover.offsetHeight - 8;
+                    let left = rect.left + (rect.width / 2) - (popover.offsetWidth / 2);
+
+                    // Boundary checks
+                    left = Math.max(8, Math.min(left, window.innerWidth - popover.offsetWidth - 8));
+                    if (top < 8) top = rect.bottom + 8;
+
+                    popover.style.top = top + 'px';
+                    popover.style.left = left + 'px';
+                    popover.style.display = 'block';
+                } else {
+                    popover.style.display = 'none';
+                    currentSelection = null;
+                }
+            }, 10);
+        });
+
+        document.addEventListener('mousedown', (e) => {
+            if (!e.target.closest('.chat-popover')) {
+                popover.style.display = 'none';
+            }
+        });
+
+        popoverBtn.addEventListener('click', () => {
+            popover.style.display = 'none';
+            openChat(currentSelection);
+        });
+
+        // =============================================
+        // 6. Chat Panel
+        // =============================================
+        const chatPanel = document.getElementById('chatPanel');
+        const chatClose = document.getElementById('chatClose');
+        const chatMessages = document.getElementById('chatMessages');
+        const chatInput = document.getElementById('chatInput');
+        const chatSend = document.getElementById('chatSend');
+        const chatContext = document.getElementById('chatContext');
+        const chatContextText = document.getElementById('chatContextText');
+
+        const chatState = {
+            open: false,
+            selectedText: '',
+            conversationHistory: [],
+            isStreaming: false
+        };
+
+        function openChat(selectedText) {
+            chatState.open = true;
+            chatState.selectedText = selectedText || '';
+            chatState.conversationHistory = [];
+
+            chatPanel.classList.add('open');
+
+            if (selectedText) {
+                chatContext.style.display = 'block';
+                chatContextText.textContent = selectedText;
+            } else {
+                chatContext.style.display = 'none';
+            }
+
+            chatMessages.innerHTML = '';
+            chatInput.focus();
+        }
+
+        function closeChat() {
+            chatState.open = false;
+            chatPanel.classList.remove('open');
+        }
+
+        chatClose.addEventListener('click', closeChat);
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && chatState.open) closeChat();
+        });
+
+        // =============================================
+        // 7. Markdown-Lite Renderer
+        // =============================================
+        function renderMarkdownLite(text) {
+            return text
+                .replace(/```(\w*)\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>')
+                .replace(/`([^`]+)`/g, '<code>$1</code>')
+                .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.+?)\*/g, '<em>$1</em>')
+                .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
+                .replace(/\n/g, '<br>');
+        }
+
+        function appendMessage(role, content) {
+            const el = document.createElement('div');
+            el.className = 'chat-message ' + role;
+            el.innerHTML = content ? renderMarkdownLite(content) : '';
+            chatMessages.appendChild(el);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            return el;
+        }
+
+        // =============================================
+        // 8. SSE Streaming Client
+        // =============================================
+        async function sendMessage(question) {
+            if (chatState.isStreaming) return;
+            chatState.isStreaming = true;
+
+            appendMessage('user', question);
+            chatState.conversationHistory.push({ role: 'user', content: question });
+
+            const assistantEl = appendMessage('assistant', '');
+            chatSend.disabled = true;
+
+            try {
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        selectedText: chatState.selectedText,
+                        question: question,
+                        conversationHistory: chatState.conversationHistory.slice(0, -1)
+                    })
+                });
+
+                if (!response.ok) throw new Error('Server returned ' + response.status);
+
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                let fullResponse = '';
+                let buffer = '';
+
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+
+                    buffer += decoder.decode(value, { stream: true });
+                    const lines = buffer.split('\n');
+                    buffer = lines.pop() || '';
+
+                    for (const line of lines) {
+                        if (!line.startsWith('data: ')) continue;
+                        const data = line.slice(6);
+                        if (data === '[DONE]') continue;
+
+                        try {
+                            const parsed = JSON.parse(data);
+                            if (parsed.error) {
+                                assistantEl.innerHTML = '<em>Error: ' + parsed.error + '</em>';
+                                break;
+                            }
+                            if (parsed.text) {
+                                fullResponse += parsed.text;
+                                assistantEl.innerHTML = renderMarkdownLite(fullResponse);
+                                chatMessages.scrollTop = chatMessages.scrollHeight;
+                            }
+                        } catch (e) { /* skip malformed */ }
+                    }
+                }
+
+                if (fullResponse) {
+                    chatState.conversationHistory.push({ role: 'assistant', content: fullResponse });
+                }
+            } catch (err) {
+                assistantEl.innerHTML = renderMarkdownLite(
+                    '**Chat unavailable.** Start the server:\n```\nnpm install && node server.js\n```'
+                );
+            } finally {
+                chatState.isStreaming = false;
+                chatSend.disabled = false;
+            }
+        }
+
+        // =============================================
+        // 9. Input Handling
+        // =============================================
+        function handleSend() {
+            const question = chatInput.value.trim();
+            if (!question || chatState.isStreaming) return;
+            chatInput.value = '';
+            chatInput.style.height = 'auto';
+            sendMessage(question);
+        }
+
+        chatSend.addEventListener('click', handleSend);
+
+        chatInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                handleSend();
+            }
+        });
+
+        chatInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+        });
+
+    })();
+    </script>
+</body>
+</html>

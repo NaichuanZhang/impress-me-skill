@@ -1,0 +1,545 @@
+/* ===========================================
+   VIEWPORT FITTING: RESEARCH PAGE BASE STYLES
+   Include this ENTIRE file in every research page.
+   Adapted from frontend-slides for hybrid scroll-snap
+   long-form research articles.
+   =========================================== */
+
+/* 1. Lock html/body to viewport */
+html, body {
+    height: 100%;
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+}
+
+/* 2. Scroll-snap with PROXIMITY — allows long sections to scroll through */
+html {
+    scroll-snap-type: y proximity;
+    scroll-behavior: smooth;
+}
+
+/* 3. Research sections — two types */
+
+/* Base section styles */
+.research-section {
+    width: 100%;
+    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    padding: var(--section-padding);
+    box-sizing: border-box;
+}
+
+/* Tight sections: hero, stats, summary — snap precisely at viewport height */
+.research-section.snap-tight {
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+}
+
+/* Flow sections: detailed analysis — min-height viewport, can extend */
+.research-section.snap-flow {
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding-top: clamp(3rem, 8vh, 6rem);
+    padding-bottom: clamp(3rem, 8vh, 6rem);
+}
+
+/* 4. Content container with reading-optimized width */
+.section-content {
+    max-width: min(70ch, 90vw);
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* Wide content for stats grids and data */
+.section-content.wide {
+    max-width: min(1100px, 92vw);
+}
+
+/* 5. ALL typography uses clamp() for responsive scaling */
+:root {
+    /* Display headings */
+    --title-size: clamp(2rem, 5vw, 4.5rem);
+    --h2-size: clamp(1.5rem, 3.5vw, 2.75rem);
+    --h3-size: clamp(1.15rem, 2.5vw, 1.75rem);
+
+    /* Body text — slightly larger than slides for reading comfort */
+    --body-size: clamp(0.95rem, 1.5vw, 1.2rem);
+    --small-size: clamp(0.75rem, 1vw, 0.9rem);
+    --mono-size: clamp(0.8rem, 1.2vw, 1rem);
+
+    /* Spacing */
+    --section-padding: clamp(1.5rem, 5vw, 5rem);
+    --content-gap: clamp(1rem, 2.5vw, 2.5rem);
+    --element-gap: clamp(0.5rem, 1.5vw, 1.5rem);
+
+    /* Line heights for reading */
+    --body-line-height: 1.7;
+    --heading-line-height: 1.2;
+}
+
+/* 6. Reading typography */
+.research-section p,
+.research-section li {
+    font-size: var(--body-size);
+    line-height: var(--body-line-height);
+}
+
+.research-section h1 {
+    font-size: var(--title-size);
+    line-height: var(--heading-line-height);
+}
+
+.research-section h2 {
+    font-size: var(--h2-size);
+    line-height: var(--heading-line-height);
+}
+
+.research-section h3 {
+    font-size: var(--h3-size);
+    line-height: 1.3;
+}
+
+/* 7. Cards/containers use viewport-relative max sizes */
+.stat-card, .finding-card, .source-card {
+    max-width: min(90vw, 500px);
+}
+
+/* 8. Stat grids */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+    gap: clamp(0.75rem, 2vw, 1.5rem);
+}
+
+/* 9. Source lists */
+.source-list {
+    list-style: none;
+    padding: 0;
+    gap: clamp(0.5rem, 1vh, 1rem);
+    display: flex;
+    flex-direction: column;
+}
+
+/* 10. Images constrained to viewport */
+img, .image-container {
+    max-width: 100%;
+    max-height: min(50vh, 400px);
+    object-fit: contain;
+}
+
+/* 11. Pull quotes */
+.pull-quote {
+    font-size: clamp(1.1rem, 2vw, 1.5rem);
+    line-height: 1.5;
+    margin: var(--content-gap) 0;
+}
+
+/* 12. Section labels */
+.section-label {
+    font-size: var(--small-size);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.section-number {
+    font-size: clamp(3rem, 8vw, 8rem);
+    font-weight: 700;
+    opacity: 0.1;
+    position: absolute;
+    top: clamp(1rem, 3vh, 3rem);
+    right: clamp(1rem, 3vw, 3rem);
+}
+
+/* ===========================================
+   REVEAL ANIMATIONS
+   =========================================== */
+
+.reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.reveal-left {
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.reveal-scale {
+    opacity: 0;
+    transform: scale(0.95);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.reveal.visible,
+.reveal-left.visible,
+.reveal-scale.visible {
+    opacity: 1;
+    transform: none;
+}
+
+/* Stagger children */
+.reveal-stagger > * {
+    opacity: 0;
+    transform: translateY(15px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.reveal-stagger.visible > *:nth-child(1) { transition-delay: 0s; opacity: 1; transform: none; }
+.reveal-stagger.visible > *:nth-child(2) { transition-delay: 0.1s; opacity: 1; transform: none; }
+.reveal-stagger.visible > *:nth-child(3) { transition-delay: 0.2s; opacity: 1; transform: none; }
+.reveal-stagger.visible > *:nth-child(4) { transition-delay: 0.3s; opacity: 1; transform: none; }
+.reveal-stagger.visible > *:nth-child(5) { transition-delay: 0.4s; opacity: 1; transform: none; }
+.reveal-stagger.visible > *:nth-child(6) { transition-delay: 0.5s; opacity: 1; transform: none; }
+
+/* ===========================================
+   READING PROGRESS BAR
+   =========================================== */
+
+.reading-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: var(--accent, #e2b714);
+    z-index: 1000;
+    transition: width 0.1s linear;
+    width: 0%;
+}
+
+/* ===========================================
+   NAVIGATION DOTS
+   =========================================== */
+
+.nav-dots {
+    position: fixed;
+    right: clamp(0.75rem, 2vw, 1.5rem);
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: clamp(6px, 1vh, 10px);
+    z-index: 100;
+}
+
+.nav-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--text-secondary, #888);
+    opacity: 0.3;
+    cursor: pointer;
+    transition: opacity 0.3s, transform 0.3s;
+    border: none;
+    padding: 0;
+}
+
+.nav-dot.active {
+    opacity: 1;
+    transform: scale(1.3);
+    background: var(--accent, #e2b714);
+}
+
+/* ===========================================
+   CHAT PANEL STYLES
+   =========================================== */
+
+/* Chat popover — appears near text selection */
+.chat-popover {
+    position: fixed;
+    z-index: 2000;
+    background: var(--card-bg, #21262d);
+    border: 1px solid var(--chat-border, #30363d);
+    border-radius: 8px;
+    padding: 0;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    animation: popover-in 0.15s ease-out;
+}
+
+@keyframes popover-in {
+    from { opacity: 0; transform: translateY(4px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.chat-popover-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: none;
+    border: none;
+    color: var(--accent, #58a6ff);
+    font-size: var(--small-size);
+    font-family: inherit;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.15s;
+    border-radius: 8px;
+}
+
+.chat-popover-btn:hover {
+    background: var(--accent-muted, rgba(88, 166, 255, 0.1));
+}
+
+/* Chat panel — slides in from right */
+.chat-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: clamp(320px, 30vw, 450px);
+    height: 100vh;
+    height: 100dvh;
+    background: var(--chat-bg, #161b22);
+    border-left: 1px solid var(--chat-border, #30363d);
+    z-index: 3000;
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: -8px 0 32px rgba(0, 0, 0, 0.2);
+}
+
+.chat-panel.open {
+    transform: translateX(0);
+}
+
+.chat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: clamp(0.75rem, 2vw, 1.25rem);
+    border-bottom: 1px solid var(--border, #30363d);
+    flex-shrink: 0;
+}
+
+.chat-header h3 {
+    font-size: var(--body-size);
+    margin: 0;
+    color: var(--text-primary);
+}
+
+.chat-close {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    line-height: 1;
+    transition: color 0.15s, background 0.15s;
+}
+
+.chat-close:hover {
+    color: var(--text-primary);
+    background: var(--accent-muted, rgba(255, 255, 255, 0.05));
+}
+
+/* Selected text context display */
+.chat-context {
+    padding: clamp(0.5rem, 1.5vw, 0.75rem) clamp(0.75rem, 2vw, 1.25rem);
+    background: var(--accent-muted, rgba(255, 255, 255, 0.03));
+    border-bottom: 1px solid var(--border, #30363d);
+    flex-shrink: 0;
+    max-height: 120px;
+    overflow-y: auto;
+}
+
+.chat-context-label {
+    font-size: var(--small-size);
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.chat-context-text {
+    font-size: var(--small-size);
+    color: var(--text-primary);
+    line-height: 1.4;
+    font-style: italic;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Chat messages */
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: clamp(0.75rem, 2vw, 1.25rem);
+    display: flex;
+    flex-direction: column;
+    gap: clamp(0.5rem, 1.5vw, 1rem);
+}
+
+.chat-message {
+    max-width: 90%;
+    padding: clamp(0.5rem, 1.5vw, 0.75rem) clamp(0.75rem, 2vw, 1rem);
+    border-radius: 12px;
+    font-size: var(--small-size);
+    line-height: 1.5;
+}
+
+.chat-message.user {
+    align-self: flex-end;
+    background: var(--accent);
+    color: var(--bg-primary, #0d1117);
+}
+
+.chat-message.assistant {
+    align-self: flex-start;
+    background: var(--card-bg, #21262d);
+    color: var(--text-primary);
+    border: 1px solid var(--border, #30363d);
+}
+
+/* Markdown rendering in chat */
+.chat-message code {
+    font-family: 'IBM Plex Mono', 'JetBrains Mono', monospace;
+    font-size: 0.9em;
+    padding: 2px 5px;
+    border-radius: 3px;
+    background: rgba(0, 0, 0, 0.15);
+}
+
+.chat-message strong { font-weight: 600; }
+
+.chat-message a {
+    color: var(--accent);
+    text-decoration: underline;
+    text-decoration-style: dotted;
+}
+
+/* Chat input area */
+.chat-input-area {
+    padding: clamp(0.5rem, 1.5vw, 0.75rem);
+    border-top: 1px solid var(--border, #30363d);
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.chat-input-area textarea {
+    flex: 1;
+    background: var(--card-bg, #21262d);
+    border: 1px solid var(--border, #30363d);
+    border-radius: 8px;
+    padding: 8px 12px;
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: var(--small-size);
+    resize: none;
+    min-height: 40px;
+    max-height: 120px;
+    outline: none;
+    transition: border-color 0.15s;
+}
+
+.chat-input-area textarea:focus {
+    border-color: var(--accent);
+}
+
+.chat-input-area textarea::placeholder {
+    color: var(--text-secondary);
+}
+
+.chat-send {
+    background: var(--accent);
+    color: var(--bg-primary, #0d1117);
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-family: inherit;
+    font-size: var(--small-size);
+    font-weight: 600;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: opacity 0.15s;
+}
+
+.chat-send:hover { opacity: 0.85; }
+.chat-send:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* ===========================================
+   RESPONSIVE BREAKPOINTS
+   =========================================== */
+
+/* Short viewports (< 700px height) */
+@media (max-height: 700px) {
+    :root {
+        --section-padding: clamp(1rem, 3vw, 2.5rem);
+        --content-gap: clamp(0.75rem, 1.5vw, 1.25rem);
+        --title-size: clamp(1.5rem, 4.5vw, 3rem);
+        --h2-size: clamp(1.25rem, 3vw, 2rem);
+    }
+}
+
+/* Very short viewports (< 600px height) */
+@media (max-height: 600px) {
+    :root {
+        --section-padding: clamp(0.75rem, 2.5vw, 1.5rem);
+        --content-gap: clamp(0.5rem, 1vw, 1rem);
+        --title-size: clamp(1.25rem, 4vw, 2rem);
+        --body-size: clamp(0.85rem, 1.2vw, 1rem);
+    }
+
+    .nav-dots { display: none; }
+}
+
+/* Narrow viewports (< 768px width) — mobile */
+@media (max-width: 768px) {
+    :root {
+        --title-size: clamp(1.5rem, 7vw, 2.5rem);
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    /* Chat panel goes full-screen on mobile */
+    .chat-panel {
+        width: 100vw;
+    }
+
+    .section-number { display: none; }
+}
+
+/* Very narrow (< 480px) */
+@media (max-width: 480px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ===========================================
+   REDUCED MOTION
+   Respect user preferences
+   =========================================== */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.2s !important;
+    }
+
+    html {
+        scroll-behavior: auto;
+    }
+
+    .reveal, .reveal-left, .reveal-scale {
+        opacity: 1;
+        transform: none;
+    }
+
+    .reveal-stagger > * {
+        opacity: 1;
+        transform: none;
+    }
+}
