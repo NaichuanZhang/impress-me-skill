@@ -24,17 +24,37 @@ Create distinctive, custom-crafted research pages. Avoid generic "AI slop" aesth
 - **Backgrounds:** Create atmosphere — layer CSS gradients, use geometric patterns, add contextual effects.
 - **CSS Gotcha:** Never negate CSS functions directly (`-clamp()` is silently ignored). Use `calc(-1 * clamp(...))` instead.
 
+## Quick Start (Generator)
+
+To skip manual template work, build a `research-config.json` and run the generator:
+
+```bash
+node ~/.claude/skills/impress-me-skill/scripts/generate.js research-config.json ./output-folder
+```
+
+The generator:
+- Reads the config, resolves the style preset, inlines all CSS/JS
+- Outputs `index.html`, `server.js`, and `package.json` ready to serve
+- Config schema: [assets/config-schema.json](assets/config-schema.json)
+
+Then spin up:
+```bash
+cd ./output-folder && npm install && node server.js
+```
+
 ## Supporting Files
 
 | File | Purpose | When to Read |
 |------|---------|-------------|
+| [scripts/generate.js](scripts/generate.js) | Page generator — config in, ready folder out | Phase 4-5 (generation) |
+| [assets/config-schema.json](assets/config-schema.json) | JSON schema for research-config.json | Phase 4 (building config) |
 | [STYLE_PRESETS.md](STYLE_PRESETS.md) | 6 research-specific visual presets | Phase 3 (style selection) |
 | [references/research-methodology.md](references/research-methodology.md) | Search strategy, source evaluation, compilation | Phase 2 (research execution) |
-| [references/chat-integration.md](references/chat-integration.md) | Text selection, chat panel, SSE client patterns | Phase 4 & 5 (generation) |
-| [assets/html-template.html](assets/html-template.html) | HTML structure with scroll-snap + chat UI | Phase 4 (page generation) |
-| [assets/viewport-research.css](assets/viewport-research.css) | Mandatory responsive CSS base | Phase 4 (page generation) |
-| [assets/server-template.js](assets/server-template.js) | Node.js chat server template | Phase 5 (server generation) |
-| [assets/package-template.json](assets/package-template.json) | npm package.json template | Phase 5 (server generation) |
+| [references/chat-integration.md](references/chat-integration.md) | Text selection, chat panel, SSE client patterns | Reference only |
+| [assets/html-template.html](assets/html-template.html) | HTML structure reference (used by generator) | Reference only |
+| [assets/viewport-research.css](assets/viewport-research.css) | Responsive CSS (auto-inlined by generator) | Reference only |
+| [assets/server-template.js](assets/server-template.js) | Chat server (copied as-is by generator) | Reference only |
+| [assets/package-template.json](assets/package-template.json) | npm package template | Reference only |
 
 ## Output Structure
 
@@ -126,66 +146,61 @@ Create the research folder with these files (formats documented in research-meth
 
 ---
 
-## Phase 4: Generate Research Page
+## Phase 4-5: Generate Research Page + Server
 
-**Before generating, read these files:**
-- [assets/html-template.html](assets/html-template.html) — HTML architecture and section structure
-- [assets/viewport-research.css](assets/viewport-research.css) — Mandatory responsive CSS (include FULL contents inline)
-- [references/chat-integration.md](references/chat-integration.md) — Chat UI and SSE client implementation
+Build a `research-config.json` from the research artifacts and chosen style, then run the generator.
 
-### Generate `index.html`
+### Step 1: Build research-config.json
 
-Create a single self-contained HTML file with ALL CSS and JS inline:
+Create a JSON file following the schema in [assets/config-schema.json](assets/config-schema.json):
 
-1. **Font link** from chosen preset (Fontshare or Google Fonts)
-2. **CSS custom properties** from chosen preset
-3. **Full viewport-research.css** pasted inline
-4. **Preset-specific styles** (signature elements from STYLE_PRESETS.md)
-5. **Sections** based on research content:
-   - Hero/title section (`.snap-tight`) — topic, key stat, date, source count
-   - Executive summary (`.snap-tight`) — key findings as stat cards
-   - Key findings (`.snap-flow`) — one section per theme, with analysis, quotes, data callouts
-   - Data/statistics section (`.snap-tight`) — if research has quantitative data
-   - Sources/bibliography (`.snap-flow`) — all cited sources with links
-6. **Chat UI** — popover + right-side slide-in panel (from html-template.html)
-7. **JavaScript** — reveals, progress bar, nav dots, counters, text selection, chat panel, SSE client
+```json
+{
+  "title": "Topic Title",
+  "subtitle": "Key finding or hook",
+  "date": "March 2026",
+  "readingTime": 12,
+  "style": { "preset": "research-lab" },
+  "stats": [
+    { "value": "85%", "label": "Market Growth" }
+  ],
+  "findings": [
+    {
+      "title": "Finding Theme",
+      "paragraphs": ["Analysis paragraph 1", "Analysis paragraph 2"],
+      "quote": { "text": "Notable quote", "author": "Author", "source": "Source" },
+      "dataCallout": "Key statistic or data point"
+    }
+  ],
+  "sources": [
+    { "title": "Source Title", "url": "https://...", "author": "Org", "date": "2026", "credibility": "High" }
+  ]
+}
+```
 
-### Content Organization Rules
+Populate from:
+- `research/summary.md` → `title`, `subtitle`, `stats`
+- `research/detailed.md` → `findings` (one per theme, with quotes and data callouts)
+- `research/sources.md` → `sources`
+- Phase 3 style choice → `style.preset`
 
-- Hero section: 1 heading + 1 subtitle + meta bar (date, sources, reading time)
-- Summary section: heading + up to 6 stat cards in grid
-- Finding sections: heading + section number + paragraphs + optional pull quote + optional data callout
-- If a finding section exceeds ~800 words, split into multiple sections
-- Sources section: all cited sources as a list with links
+Available presets: `scholarly-dusk`, `research-lab`, `midnight-journal`, `paper-trail`, `signal-report`, `neon-dispatch`
 
-### Viewport Rules
+### Step 2: Run the generator
 
-- `.snap-tight` sections: `height: 100vh; height: 100dvh; overflow: hidden;`
-- `.snap-flow` sections: `min-height: 100vh;` (no max-height, content flows)
-- ALL font sizes use `clamp(min, preferred, max)` — never fixed px/rem
-- Include `prefers-reduced-motion` support
-- Test mental model: content must fit at 1280x720 for tight sections
+```bash
+node ~/.claude/skills/impress-me-skill/scripts/generate.js research-config.json ./{topic}
+```
 
----
+This outputs a ready-to-serve folder:
+- `index.html` — fully populated, all CSS/JS inlined, chat UI included
+- `server.js` — copied from template as-is (zero customization needed)
+- `package.json` — dependencies configured
+- `research/` — empty directory for research markdown files
 
-## Phase 5: Generate Server
+### Step 3: Copy research files
 
-**Read [assets/server-template.js](assets/server-template.js) as the foundation.**
-
-### Generate `server.js`
-
-Copy the server template and customize:
-- Research context is loaded from `research/summary.md` and `research/detailed.md` on startup
-- System prompt incorporates the full research context so Claude can answer accurately
-- SSE streaming endpoint at `POST /chat`
-- Serves `index.html` at `/`
-- Port 3737 (configurable via `PORT` env var)
-
-### Generate `package.json`
-
-From [assets/package-template.json](assets/package-template.json), replace:
-- `TOPIC_SLUG` with a kebab-case version of the topic
-- `TOPIC_NAME` with the readable topic name
+Copy the research markdown files into the output folder's `research/` directory so the chat server can load them as context.
 
 ### Auth Configuration
 
@@ -193,8 +208,6 @@ The Claude Agent SDK reads auth from environment variables automatically:
 - **Amazon Bedrock:** `CLAUDE_CODE_USE_BEDROCK=1` + AWS credentials
 - **Google Vertex AI:** `CLAUDE_CODE_USE_VERTEX=1` + Google Cloud credentials
 - **Direct API:** `ANTHROPIC_API_KEY` environment variable
-
-No code changes needed — the SDK detects the provider automatically.
 
 ---
 

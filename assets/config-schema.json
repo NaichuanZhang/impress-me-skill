@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Research Page Config",
+  "description": "Configuration for the generate.js script. Provide this JSON to generate a complete research page.",
+  "type": "object",
+  "required": ["title", "subtitle", "date", "findings", "sources"],
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Main research topic title"
+    },
+    "subtitle": {
+      "type": "string",
+      "description": "Key finding or hook subtitle"
+    },
+    "date": {
+      "type": "string",
+      "description": "Research date (e.g. 'March 2026')"
+    },
+    "sourceCount": {
+      "type": "number",
+      "description": "Number of sources (auto-calculated from sources array if omitted)"
+    },
+    "readingTime": {
+      "type": "number",
+      "description": "Estimated reading time in minutes"
+    },
+    "style": {
+      "type": "object",
+      "properties": {
+        "preset": {
+          "type": "string",
+          "enum": ["scholarly-dusk", "research-lab", "midnight-journal", "paper-trail", "signal-report", "neon-dispatch"],
+          "description": "Visual style preset. Defaults to 'research-lab'."
+        },
+        "fontLink": {
+          "type": "string",
+          "description": "Override preset font URL (Google Fonts or Fontshare)"
+        },
+        "colors": {
+          "type": "object",
+          "description": "Override individual CSS color variables (e.g. { '--accent': '#ff0000' })"
+        }
+      }
+    },
+    "stats": {
+      "type": "array",
+      "description": "Key statistics shown in the summary and data sections",
+      "items": {
+        "type": "object",
+        "required": ["value", "label"],
+        "properties": {
+          "value": { "type": "string", "description": "Stat value (e.g. '85%', '1.2B', '42')" },
+          "label": { "type": "string", "description": "Short label (e.g. 'Market Growth', 'Users')" }
+        }
+      }
+    },
+    "findings": {
+      "type": "array",
+      "description": "Key research findings, one section per finding",
+      "items": {
+        "type": "object",
+        "required": ["title", "paragraphs"],
+        "properties": {
+          "title": { "type": "string", "description": "Finding section heading" },
+          "paragraphs": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Analysis paragraphs"
+          },
+          "quote": {
+            "type": "object",
+            "properties": {
+              "text": { "type": "string" },
+              "author": { "type": "string" },
+              "source": { "type": "string" }
+            },
+            "description": "Optional pull quote"
+          },
+          "dataCallout": { "type": "string", "description": "Optional highlighted data point" },
+          "subFindings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "title": { "type": "string" },
+                "detail": { "type": "string" }
+              }
+            },
+            "description": "Optional sub-finding cards"
+          }
+        }
+      }
+    },
+    "sources": {
+      "type": "array",
+      "description": "All cited sources",
+      "items": {
+        "type": "object",
+        "required": ["title", "url"],
+        "properties": {
+          "title": { "type": "string" },
+          "url": { "type": "string" },
+          "author": { "type": "string" },
+          "date": { "type": "string" },
+          "credibility": { "type": "string", "enum": ["High", "Medium", "Low"] }
+        }
+      }
+    }
+  }
+}
